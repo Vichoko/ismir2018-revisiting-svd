@@ -58,6 +58,7 @@ def main():
     y_pred = loaded_model.predict(x_test, verbose=1)  # Shape=(total_frames,)
 
     print(y_pred)
+    np.save(args.input + ".npy", y_pred)
     return y_pred
 
 
