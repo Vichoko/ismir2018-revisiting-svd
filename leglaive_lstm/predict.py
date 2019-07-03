@@ -33,21 +33,16 @@ def main():
     print("loaded model")
     print(loaded_model.summary())
 
-  
     input_mel = process_single_audio(args.input)
-    
+
     total_x = []
-    total_y = []
-    
+
     x = input_mel
     for i in range(0, x.shape[1] - RNN_INPUT_SIZE, 1):
         x_segment = x[:, i: i + RNN_INPUT_SIZE]
-        y_segment = y[i: i + RNN_INPUT_SIZE]
         total_x.append(x_segment)
-        total_y.append(y_segment)
 
     total_x = np.array(total_x)
-    total_y = np.array(total_y)
     try:
         mean_std = np.load("train_mean_std_" + model_name + '.npy')
         mean = mean_std[0]
@@ -60,12 +55,11 @@ def main():
     total_x_norm = np.swapaxes(total_x_norm, 1, 2)
 
     x_test = total_x_norm
-    y_pred = loaded_model.predict(x_test, verbose=1) # Shape=(total_frames,)
-    
+    y_pred = loaded_model.predict(x_test, verbose=1)  # Shape=(total_frames,)
+
     print(y_pred)
     return y_pred
-	
-	
+
+
 if __name__ == "__main__":
-	main()
-	
+    main()
