@@ -23,7 +23,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_name', type=str)
 parser.add_argument('--input', type=str)
-args = parser.parse_args()
+args = parser.parse_known_args()
 
 
 def main():
