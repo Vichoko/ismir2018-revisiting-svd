@@ -13,6 +13,7 @@ import argparse
 from load_data import *
 from model import *
 from config_rnn import *
+from audio_processor import process_single_audio
 
 np.random.seed(0)
 
