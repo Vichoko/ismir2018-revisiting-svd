@@ -9,9 +9,6 @@ from config_rnn import *
 sys.path.append('../util')
 from audio import ono_hpss, log_melgram
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', type=str)
-args = parser.parse_args()
 
 
 def process_single_audio(audio_file):
@@ -70,6 +67,10 @@ def process_to_mel_feature(base_dir, mel_dir, set_list=['']):
 
 
 if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dataset', type=str)
+    args = parser.parse_args()
     if args.dataset == 'jamendo':
         set_list = ['train', 'test', 'valid']
         process_to_mel_feature(JAMENDO_DIR, MEL_JAMENDO_DIR, set_list)
