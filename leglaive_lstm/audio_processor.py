@@ -10,30 +10,35 @@ sys.path.append('../util')
 from audio import ono_hpss, log_melgram
 
 
-
-def process_single_audio(audio_file):
+def process_single_audio(audio_file, cache=False):
     ''' Compute double stage HPSS for the given audio file
     Args : 
         audio_file : path to audio file 
     Return :
         mel_D2_total : concatenated melspectrogram of percussive, harmonic components of double stage HPSS. Shape=(2 * n_bins, total_frames) ex. (80, 2004) 
     '''
-    audio_src, _ = librosa.load(audio_file, sr=SR)
-    # Normalize audio signal
-    audio_src = librosa.util.normalize(audio_src)
-    # first HPSS
-    D_harmonic, D_percussive = ono_hpss(audio_src, N_FFT1, N_HOP1)
-    # second HPSS
-    D2_harmonic, D2_percussive = ono_hpss(D_percussive, N_FFT2, N_HOP2)
+    try:
+        if not cache:
+            raise IOError
+        mel_total = np.load(MEL_CACHE_DIR / '{}.mel.npy'.format(audio_file))
+    except IOError:
+        audio_src, _ = librosa.load(audio_file, sr=SR)
+        # Normalize audio signal
+        audio_src = librosa.util.normalize(audio_src)
+        # first HPSS
+        D_harmonic, D_percussive = ono_hpss(audio_src, N_FFT1, N_HOP1)
+        # second HPSS
+        D2_harmonic, D2_percussive = ono_hpss(D_percussive, N_FFT2, N_HOP2)
 
-    assert D2_harmonic.shape == D2_percussive.shape
-    print(D2_harmonic.shape, D2_percussive.shape)
+        assert D2_harmonic.shape == D2_percussive.shape
+        print(D2_harmonic.shape, D2_percussive.shape)
 
-    # compute melgram 
-    mel_harmonic = log_melgram(D2_harmonic, SR, N_FFT2, N_HOP2, N_MELS)
-    mel_percussive = log_melgram(D2_percussive, SR, N_FFT2, N_HOP2, N_MELS)
-    # concat
-    mel_total = np.vstack((mel_harmonic, mel_percussive))
+        # compute melgram
+        mel_harmonic = log_melgram(D2_harmonic, SR, N_FFT2, N_HOP2, N_MELS)
+        mel_percussive = log_melgram(D2_percussive, SR, N_FFT2, N_HOP2, N_MELS)
+        # concat
+        mel_total = np.vstack((mel_harmonic, mel_percussive))
+        np.save(MEL_CACHE_DIR / '{}.mel.npy'.format(audio_file), mel_total)
 
     print(mel_total.shape)
     return mel_total

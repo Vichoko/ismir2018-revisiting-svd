@@ -1,11 +1,27 @@
 '''
 Config for LSTM model 
 '''
+import pathlib
+# predictions
+from os import makedirs
+
+DEFAULT_MODEL = 'june2019'
+PREDICTIONS_DIR = pathlib.Path('./predictions')
+MEL_CACHE_DIR = pathlib.Path('./mel_cache')
+
+try:
+    makedirs(PREDICTIONS_DIR)
+except Exception:
+    pass
+try:
+    makedirs(MEL_CACHE_DIR)
+except Exception:
+    pass
 
 # jamendo
-JAMENDO_DIR = '../jamendo/'  # path to jamendo dataset
-JAMENDO_LABEL_DIR = '../jamendo/jamendo_lab/'  # path to jamendo label
-MEL_JAMENDO_DIR = '../jamendo/ono_leglaive_mel_dir/'
+JAMENDO_DIR = pathlib.Path('../jamendo/')  # path to jamendo dataset
+JAMENDO_LABEL_DIR = pathlib.Path('../jamendo/labels/ ')  # path to jamendo label
+MEL_JAMENDO_DIR = pathlib.Path('../jamendo/mel/')
 
 # Medleydb
 MDB_VOC_DIR = '/media/bach1/dataset/MedleyDB/'  # path to medleydb vocal containing song
