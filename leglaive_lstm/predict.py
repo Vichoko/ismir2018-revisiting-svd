@@ -42,7 +42,7 @@ def predict_song(model_name, filename, cache=True):
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
         # load mode
-        loaded_model = load_model(WEIGHTS_DIR / 'rnn_{}.h5'.format(model_name))
+        loaded_model = load_model(str(WEIGHTS_DIR / 'rnn_{}.h5'.format(model_name)))
         print("loaded model")
         print(loaded_model.summary())
 
