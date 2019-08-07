@@ -42,7 +42,7 @@ def predict_song(model_name, filename, cache=True):
         os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
         # load model
-        loaded_model = load_model('./weights/rnn_' + model_name + '.h5')
+        loaded_model = load_model(WEIGHTS_DIR / 'rnn_' + model_name + '.h5')
         print("loaded model")
         print(loaded_model.summary())
 
@@ -55,7 +55,7 @@ def predict_song(model_name, filename, cache=True):
 
         total_x = np.array(total_x)
         try:
-            mean_std = np.load("train_mean_std_" + model_name + '.npy')
+            mean_std = np.load(WEIGHTS_DIR / "train_mean_std_" + model_name + '.npy')
             mean = mean_std[0]
             std = mean_std[1]
         except Exception:
