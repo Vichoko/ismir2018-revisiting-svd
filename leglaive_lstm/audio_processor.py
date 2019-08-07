@@ -15,10 +15,12 @@ def process_single_audio(audio_file, cache=False):
     Return :
         mel_D2_total : concatenated melspectrogram of percussive, harmonic components of double stage HPSS. Shape=(2 * n_bins, total_frames) ex. (80, 2004) 
     '''
+    audio_name = audio_file.split('/')[-1]
+    cache_filename = MEL_CACHE_DIR / '{}.mel.npy'.format(audio_name)
     try:
         if not cache:
             raise IOError
-        mel_total = np.load(MEL_CACHE_DIR / '{}.mel.npy'.format(audio_file))
+        mel_total = np.load(cache_filename)
     except IOError:
         audio_src, _ = librosa.load(audio_file, sr=SR)
         # Normalize audio signal
@@ -36,7 +38,8 @@ def process_single_audio(audio_file, cache=False):
         mel_percussive = log_melgram(D2_percussive, SR, N_FFT2, N_HOP2, N_MELS)
         # concat
         mel_total = np.vstack((mel_harmonic, mel_percussive))
-        np.save(MEL_CACHE_DIR / '{}.mel.npy'.format(audio_file), mel_total)
+        
+        np.save(cache_filename, mel_total)
 
     print(mel_total.shape)
     return mel_total
