@@ -24,7 +24,8 @@ def predict_song(model_name, filename, cache=True):
     :return: Prediction: Raw probability for each frame of the MFCC of the input song with overlapping by the RNN settings
     """
     audio_name = str(filename).split('/')[-1]
-    cache_filename = PREDICTIONS_DIR / '{}.{}.npy'.format(audio_name, model_name)
+    audio_name_prefix = '.'.join(str(filename).split('/')[:-1])
+    cache_filename = PREDICTIONS_DIR / '{}.{}.{}.npy'.format(audio_name_prefix, audio_name, model_name)
     try:
         if not cache:
             raise IOError
@@ -84,7 +85,9 @@ def frame_level_predict(model_name, filename, cache=True, plot=False):
     :param plot: flag to plot MFCCs and SVD in an aligned plot if GUI available.
     :return: (Time, Predictions): SVD probabilities at frame level with time markings
     """
-    serialized_filename = PREDICTIONS_DIR / '{}.{}.csv'.format(filename, model_name)
+    audio_name = str(filename).split('/')[-1]
+    audio_name_prefix = '.'.join(str(filename).split('/')[:-1])
+    serialized_filename = PREDICTIONS_DIR / '{}.{}.{}.csv'.format(audio_name_prefix, audio_name, model_name)
     mel = process_single_audio(filename, cache=cache)
 
     try:
