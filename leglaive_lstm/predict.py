@@ -23,7 +23,8 @@ def predict_song(model_name, filename, cache=True):
     :param cache: flag to optimize heavy operations with caching in disk
     :return: Prediction: Raw probability for each frame of the MFCC of the input song with overlapping by the RNN settings
     """
-    cache_filename = PREDICTIONS_DIR / '{}.{}.npy'.format(filename, model_name)
+    audio_name = str(filename).split('/')[-1]
+    cache_filename = PREDICTIONS_DIR / '{}.{}.npy'.format(audio_name, model_name)
     try:
         if not cache:
             raise IOError

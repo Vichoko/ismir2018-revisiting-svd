@@ -15,7 +15,7 @@ def process_single_audio(audio_file, cache=False):
     Return :
         mel_D2_total : concatenated melspectrogram of percussive, harmonic components of double stage HPSS. Shape=(2 * n_bins, total_frames) ex. (80, 2004) 
     '''
-    audio_name = audio_file.split('/')[-1]
+    audio_name = str(audio_file).split('/')[-1]
     cache_filename = MEL_CACHE_DIR / '{}.mel.npy'.format(audio_name)
     try:
         if not cache:
