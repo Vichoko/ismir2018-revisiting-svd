@@ -4,10 +4,8 @@ import sys
 import numpy as np
 import librosa
 import argparse
-from config_rnn import *
-
-sys.path.append('../util')
-from audio import ono_hpss, log_melgram
+from leglaive_lstm.config_rnn import *
+from leglaive_lstm.audio import ono_hpss, log_melgram
 
 
 def process_single_audio(audio_file, cache=False):

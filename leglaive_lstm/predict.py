@@ -1,9 +1,8 @@
-from audio_processor import process_single_audio
-from config_rnn import *
+from leglaive_lstm.audio_processor import process_single_audio
 import argparse
 import numpy as np
 
-from config_rnn import SR, N_HOP2, N_FFT2
+from leglaive_lstm.config_rnn import *
 from librosa.core import frames_to_time
 
 
@@ -85,6 +84,8 @@ def frame_level_predict(model_name, filename, cache=True, plot=False):
     :return: (Time, Predictions): SVD probabilities at frame level with time markings
     """
     serialized_filename = PREDICTIONS_DIR / '{}.{}.csv'.format(filename, model_name)
+    mel = process_single_audio(filename, cache=cache)
+
     try:
         if not cache:
             raise IOError
@@ -93,7 +94,6 @@ def frame_level_predict(model_name, filename, cache=True, plot=False):
         frame_level_y_pred = data[1]
         print("info: loaded serialized prediction")
     except Exception:
-        mel = process_single_audio(filename, cache=cache)
 
         # transform raw predictions to frame level
         y_pred = predict_song(model_name, filename, cache=cache)
@@ -112,21 +112,22 @@ def frame_level_predict(model_name, filename, cache=True, plot=False):
         time = frames_to_time(range(len(frame_level_y_pred)), sr=SR, n_fft=N_FFT2, hop_length=N_HOP2)
         np.savetxt(serialized_filename, np.asarray((time, frame_level_y_pred)), delimiter=",")
         print("info: saved serialized prediction")
-        if plot:
-            import matplotlib.pyplot as plt
-            import librosa.display
+    if plot:
+        import matplotlib.pyplot as plt
+        import librosa.display
 
-            # plot stacked MFCCs
-            plt.figure(figsize=(14, 5))
-            plt.subplot(211)
-            librosa.display.specshow(mel, sr=SR, x_axis='time', y_axis='hz', hop_length=N_HOP2)
+        # plot stacked MFCCs
+        plt.figure(figsize=(14, 5))
+        plt.subplot(211)
+        librosa.display.specshow(mel, sr=SR, x_axis='time', y_axis='hz', hop_length=N_HOP2)
 
-            # plot frame level predictions
-            plt.subplot(313)
-            plt.plot(time, frame_level_y_pred)
-            plt.xlabel("Time")
-            plt.ylabel("Singing Voice Activation")
-            plt.show()
+        # plot frame level predictions
+        plt.subplot(313)
+        plt.plot(time, frame_level_y_pred)
+        plt.xlabel("Time")
+        plt.ylabel("Singing Voice Activation")
+        plt.show()
+        print("info: plotted")
     print('info: done')
     return time, frame_level_y_pred
 
