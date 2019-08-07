@@ -8,7 +8,6 @@ from os import makedirs
 DEFAULT_MODEL = 'june2019'
 PREDICTIONS_DIR = pathlib.Path('./predictions')
 MEL_CACHE_DIR = pathlib.Path('./mel_cache')
-WEIGHTS_DIR = pathlib.Path('./weights')
 
 try:
     makedirs(PREDICTIONS_DIR)
@@ -34,7 +33,7 @@ MEL_VIB_DIR = '../sawtooth_200/leglaive_mel_dir/'
 
 # -- Audio processing parameters --#
 SR = 16000
-N_FFT1 = +
+N_FFT1 = 4096
 N_HOP1 = 2048
 N_FFT2 = 512
 N_HOP2 = 256
