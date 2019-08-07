@@ -8,6 +8,7 @@ from os import makedirs
 DEFAULT_MODEL = 'june2019'
 PREDICTIONS_DIR = pathlib.Path('./predictions')
 MEL_CACHE_DIR = pathlib.Path('./mel_cache')
+WEIGHTS_DIR = pathlib.Path('./weights')
 
 try:
     makedirs(PREDICTIONS_DIR)
