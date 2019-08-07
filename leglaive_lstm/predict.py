@@ -33,7 +33,6 @@ def predict_song(model_name, filename, cache=True):
     except IOError:
         import os
         import sys
-        from audio_processor import process_single_audio
 
         input_mel = process_single_audio(filename, cache=True)
 
